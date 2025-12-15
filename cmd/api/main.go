@@ -41,6 +41,7 @@ func main() {
 	r.GET("/fetch/:ticker", handlers.FetchAndStoreStock)
 	r.GET("/stock", handlers.GetStock)
 	r.GET("/compare", handlers.CompareStocks)
+	r.GET("/current-prices", handlers.GetCurrentPrices)
 
 	// Get port
 	port := os.Getenv("PORT")

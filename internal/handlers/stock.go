@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/chuma-beep/stock-saas/internal/database"
 	"github.com/chuma-beep/stock-saas/internal/services"
@@ -146,4 +147,56 @@ func CompareStocks(c *gin.Context) {
 		"start_date": startDate,
 		"end_date":   endDate,
 	})
+}
+
+func GetCurrentPrices(c *gin.Context) {
+	tickers := []string{"AAPL", "MSFT", "GOOGL", "TSLA", "AMZN"}
+
+	var results []map[string]interface{}
+
+	for _, ticker := range tickers {
+		// Get the most recent price from database
+		query := `
+            SELECT ticker, close, date
+            FROM stocks
+            WHERE ticker = $1
+            ORDER BY date DESC
+            LIMIT 1
+        `
+
+		var t string
+		var close float64
+		var date time.Time
+
+		err := database.DB.QueryRow(query, ticker).Scan(&t, &close, &date)
+		if err != nil {
+			log.Printf("Error getting price for %s: %v", ticker, err)
+			continue
+		}
+
+		// Get previous day's price to calculate change
+		query2 := `
+            SELECT close
+            FROM stocks
+            WHERE ticker = $1 AND date < $2
+            ORDER BY date DESC
+            LIMIT 1
+        `
+
+		var prevClose float64
+		err = database.DB.QueryRow(query2, ticker, date).Scan(&prevClose)
+
+		change := 0.0
+		if err == nil && prevClose > 0 {
+			change = ((close - prevClose) / prevClose) * 100
+		}
+
+		results = append(results, map[string]interface{}{
+			"symbol": t,
+			"price":  close,
+			"change": change,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"stocks": results})
 }

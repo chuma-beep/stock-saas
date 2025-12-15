@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Stock struct {
 	ID        int       `json:"id"`
