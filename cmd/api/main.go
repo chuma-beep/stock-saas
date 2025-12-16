@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/chuma-beep/stock-saas/internal/database"
+	"github.com/chuma-beep/stock-saas/internal/handler"
 	"github.com/chuma-beep/stock-saas/internal/handlers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -36,6 +37,8 @@ func main() {
 			"message": "Stock SaaS API is running",
 		})
 	})
+
+	r.POST("/api/analyze", handler.AnalyzeComparison)
 
 	// Stock routes
 	r.GET("/fetch/:ticker", handlers.FetchAndStoreStock)
