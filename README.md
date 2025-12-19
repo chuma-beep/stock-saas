@@ -294,7 +294,6 @@ Auto-deploys on git push!
 
 ## 📝 License
 
-this is private property 
 
 ## 👤 Author
 
