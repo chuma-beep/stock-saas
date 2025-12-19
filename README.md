@@ -9,6 +9,17 @@
 
 A Go-based REST API for comparing stock performance across different time periods with AI-powered analysis.
 
+## Why this project exists
+This project demonstrates how to build a production-ready Go backend
+that combines external data sources with AI inference.
+
+The focus is not model training, but:
+- Reliable API design
+- Data caching and cost control
+- AI used as a system component
+- Clean separation of concerns
+
+
 ## 🚀 Features
 
 - Fetch historical stock data from Alpha Vantage
@@ -22,9 +33,23 @@ A Go-based REST API for comparing stock performance across different time period
 
 - **Language:** Go 1.21+
 - **Framework:** Gin
-- **Database:** PostgreSQL
+- **Database:** PostgreSQ
 - **APIs:** Alpha Vantage (stock data), Groq (AI analysis)
 - **Deployment:** Render.com
+
+
+## Request Flow
+
+```mermaid
+flowchart LR
+Client --> API
+API --> PostgreSQL
+API --> AlphaVantage
+API --> Groq
+PostgreSQL --> API
+Groq --> API
+API --> Client
+```
 
 ## 📋 Prerequisites
 
@@ -143,6 +168,7 @@ curl "http://localhost:8080/stock?ticker=AAPL&start=2025-11-01&end=2025-12-11"
 }
 ```
 
+
 ---
 
 ### Compare Stocks
@@ -206,12 +232,9 @@ Returns the latest prices for popular stocks.
 }
 ```
 
----
 
-### AI Analysis
-```http
-POST /analyze
-```
+### Why AI via API (Groq)
+- Focus on AI integration, not model trai```
 
 Generates AI-powered insights about a stock comparison.
 
@@ -229,6 +252,24 @@ Generates AI-powered insights about a stock comparison.
   "analysis": "• AAPL outperformed MSFT by 3.7% during this period...\n• Key drivers: Holiday sales momentum...\n• Correlation: 72% (highly correlated)...\n• Volatility: AAPL 15.3%, MSFT 12.1%..."
 }
 ```
+
+
+```
+## Key Engineering Decisions
+
+### Why Go
+- Strong concurrency model
+- Low-latency HTTP services
+- Simple deployment (single binary)
+
+### Why PostgreSQL instead of Redis
+- Persistent caching
+- Queryable historical ranges
+- Simpler infra for early-stage systems
+
+### Why AI via API (Groq)
+- Focus on AI integration, not model training
+- Lower operational complexity
 
 ---
 
@@ -298,8 +339,6 @@ Auto-deploys on git push!
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## 📝 License
 
 
 ## 👤 Author
