@@ -1,5 +1,12 @@
 # Stock SaaS - Backend API
 
+
+
+![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-316192?style=flat&logo=postgresql)
+![License](https://img.shields.io/badge/License-Private-red)
+![Status](https://img.shields.io/badge/Status-Live-success)
+
 A Go-based REST API for comparing stock performance across different time periods with AI-powered analysis.
 
 ## 🚀 Features
