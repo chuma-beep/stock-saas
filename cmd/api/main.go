@@ -24,7 +24,28 @@ func main() {
 	}
 	defer database.Close()
 
-	//  Gin router
+	// Auto-create table with Unique Constraint
+
+	createTableQuery := `
+    CREATE TABLE IF NOT EXISTS stocks (
+        id SERIAL PRIMARY KEY,
+        ticker VARCHAR(10) NOT NULL,
+        date DATE NOT NULL,
+        open NUMERIC NOT NULL,
+        high NUMERIC NOT NULL,
+        low NUMERIC NOT NULL,
+        close NUMERIC NOT NULL,
+        volume BIGINT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (ticker, date)
+    );`
+
+	if _, err := database.DB.Exec(createTableQuery); err != nil {
+		log.Fatal("Failed to create database table:", err)
+	}
+	log.Println("✅ Database table check passed")
+
+	// Gin router
 	r := gin.Default()
 
 	// CORS middleware
