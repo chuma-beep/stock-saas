@@ -24,7 +24,7 @@ func main() {
 	}
 	defer database.Close()
 
-	// Create Gin router
+	//  Gin router
 	r := gin.Default()
 
 	// CORS middleware
