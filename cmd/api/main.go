@@ -31,7 +31,17 @@ func main() {
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
-	}
+	}  
+
+
+	// Get port from environment variable (Cloud Run requirement)
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+    
+    router.Run(":" + port)
+}
 
 	// Connect to database
 	if err := database.Connect(); err != nil {
