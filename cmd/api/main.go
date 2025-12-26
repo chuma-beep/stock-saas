@@ -18,7 +18,7 @@ func main() {
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-			"http://localhost:3000",      
+			"http://localhost:3000",
 			"//https://stock-saas-frontend.vercel.app/",
 		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -31,17 +31,15 @@ func main() {
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
-	}  
-
+	}
 
 	// Get port from environment variable  for google Cloud Run
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "8080"
-    }
-    
-    router.Run(":" + port)
-}
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	router.Run(":" + port)
 
 	// Connect to database
 	if err := database.Connect(); err != nil {
@@ -70,33 +68,24 @@ func main() {
 	}
 	log.Println("✅ Database table check passed")
 
-	// Gin router
-	r := gin.Default()
-
 	// CORS middleware
-	r.Use(cors.Default())
+	router.Use(cors.Default())
 
 	// Health check
-	r.GET("/health", func(c *gin.Context) {
+	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  "ok",
 			"message": "Stock SaaS API is running",
 		})
 	})
 
-	r.POST("/api/analyze", handler.AnalyzeComparison)
+	router.POST("/api/analyze", handler.AnalyzeComparison)
 
 	// Stock routes
-	r.GET("/fetch/:ticker", handlers.FetchAndStoreStock)
-	r.GET("/stock", handlers.GetStock)
-	r.GET("/compare", handlers.CompareStocks)
-	r.GET("/current-prices", handlers.GetCurrentPrices)
-
-	// Get port
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	router.GET("/fetch/:ticker", handlers.FetchAndStoreStock)
+	router.GET("/stock", handlers.GetStock)
+	router.GET("/compare", handlers.CompareStocks)
+	router.GET("/current-prices", handlers.GetCurrentPrices)
 
 	log.Printf("🚀 Server starting on port %s", port)
 	log.Println("📊 Available endpoints:")
@@ -104,6 +93,4 @@ func main() {
 	log.Println("  GET /fetch/:ticker")
 	log.Println("  GET /stock?ticker=AAPL&start=2024-01-01&end=2024-12-01")
 	log.Println("  GET /compare?ticker1=AAPL&ticker2=MSFT&start=2024-01-01&end=2024-12-01")
-
-	r.Run(":" + port)
 }
