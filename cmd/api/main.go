@@ -34,7 +34,7 @@ func main() {
 	}  
 
 
-	// Get port from environment variable (Cloud Run requirement)
+	// Get port from environment variable  for google Cloud Run
     port := os.Getenv("PORT")
     if port == "" {
         port = "8080"
