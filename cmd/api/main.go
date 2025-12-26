@@ -18,8 +18,8 @@ func main() {
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-			"http://localhost:3000",       // Local Next.js dev
-			"https://your-app.vercel.app", // Your production frontend
+			"http://localhost:3000",      
+			"//https://stock-saas-frontend.vercel.app/",
 		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
