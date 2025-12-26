@@ -39,8 +39,6 @@ func main() {
 		port = "8080"
 	}
 
-	router.Run(":" + port)
-
 	// Connect to database
 	if err := database.Connect(); err != nil {
 		log.Fatal("Failed to connect to database:", err)
@@ -68,9 +66,6 @@ func main() {
 	}
 	log.Println("✅ Database table check passed")
 
-	// CORS middleware
-	router.Use(cors.Default())
-
 	// Health check
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -93,4 +88,6 @@ func main() {
 	log.Println("  GET /fetch/:ticker")
 	log.Println("  GET /stock?ticker=AAPL&start=2024-01-01&end=2024-12-01")
 	log.Println("  GET /compare?ticker1=AAPL&ticker2=MSFT&start=2024-01-01&end=2024-12-01")
+
+	router.Run(":" + port)
 }
