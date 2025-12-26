@@ -1,5 +1,5 @@
-# Build stage
-FROM golang:1.21-alpine AS builder
+# Build stage - UPDATE THIS LINE
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
