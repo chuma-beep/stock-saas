@@ -21,12 +21,20 @@ func Connect() error {
 		return fmt.Errorf("error opening database: %w", err)
 	}
 
-	if err = DB.Ping(); err != nil {
-		return fmt.Errorf("error connecting to database: %w", err)
+	DB.SetMaxOpenConns(25)
+	DB.SetMaxIdleConns(25)
+	DB.SetConnMaxLifetime(5 * time.Minute)
+
+	for i := 0; i < 10; i++ {
+		if err = DB.Ping(); err == nil {
+			log.Println("✅ Database connected successfully")
+			return nil
+		}
+		log.Printf("⏳ Database connection attempt %d failed, retrying...", i+1)
+		time.Sleep(time.Second * 2)
 	}
 
-	log.Println("✅ Database connected successfully")
-	return nil
+	return fmt.Errorf("error connecting to database after 10 attempts: %w", err)
 }
 
 func Close() {

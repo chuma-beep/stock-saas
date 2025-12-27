@@ -20,6 +20,7 @@ func main() {
 		AllowOrigins: []string{
 			"http://localhost:3000",
 			"https://stock-saas-frontend.vercel.app",
+			"https://*.onrender.com",
 		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
