@@ -1,0 +1,25 @@
+# Database
+*.db
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Test files
+*_test.go
+
+# Documentation
+README.md
+docs/
+
+# Frontend (deploy separately)
+portfolio/
+
+# Logs
+*.log
