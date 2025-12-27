@@ -65,6 +65,19 @@ func main() {
 	if _, err := database.DB.Exec(createTableQuery); err != nil {
 		log.Fatal("Failed to create database table:", err)
 	}
+
+	feedbackTableQuery := `
+	CREATE TABLE IF NOT EXISTS feedback (
+		id SERIAL PRIMARY KEY,
+		name VARCHAR(255),
+		email VARCHAR(255),
+		feedback TEXT NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);`
+
+	if _, err := database.DB.Exec(feedbackTableQuery); err != nil {
+		log.Fatal("Failed to create feedback table:", err)
+	}
 	log.Println("✅ Database table check passed")
 
 	// Health check
@@ -82,6 +95,10 @@ func main() {
 	router.GET("/stock", handlers.GetStock)
 	router.GET("/compare", handlers.CompareStocks)
 	router.GET("/current-prices", handlers.GetCurrentPrices)
+
+	// Feedback routes
+	router.POST("/feedback", handler.SubmitFeedback)
+	router.GET("/feedback", handler.GetFeedback)
 
 	log.Printf("🚀 Server starting on port %s", port)
 	log.Println("📊 Available endpoints:")
